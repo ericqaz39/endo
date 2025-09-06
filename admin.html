@@ -1,22 +1,39 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8">
-  <title>新增醫師資料</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>新增醫師資料</h1>
-  <form id="doctorForm">
-    <label>姓名：<input type="text" id="name" required></label>
-    <label>診所：<input type="text" id="clinic" required></label>
-    <label>電話：<input type="text" id="phone"></label>
-    <label>地址：<input type="text" id="address" required></label>
-    <label>經度 (lng)：<input type="number" step="0.000001" id="lng" required></label>
-    <label>緯度 (lat)：<input type="number" step="0.000001" id="lat" required></label>
-    <button type="submit">新增醫師</button>
-  </form>
-  <p><a href="index.html">回到地圖</a></p>
-  <script src="admin.js"></script>
-</body>
-</html>
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>醫師資料管理（Admin）</title>
+<style>body{font-family: Arial, sans-serif; padding:20px;} input,button,select{padding:8px;margin:6px 0;width:100%;max-width:480px;} .row{display:flex;gap:8px;flex-wrap:wrap} table{border-collapse:collapse;margin-top:12px;width:100%;max-width:920px} th,td{border:1px solid #ddd;padding:8px;text-align:left}</style>
+</head><body>
+  <h1>醫師資料管理（Admin）</h1>
+  <p>新增醫師後可直接「新增」到列表，或匯出 `doctors.json` 下載後上傳至 GitHub。</p>
+  <div>
+    <input id="name" placeholder="姓名" />
+    <input id="clinic" placeholder="診所 / 醫院" />
+    <input id="phone" placeholder="電話" />
+    <input id="fax" placeholder="傳真 (可留空)" />
+    <input id="address" placeholder="地址" />
+    <input id="district" placeholder="行政區 (例如 大安區)" />
+    <button id="addBtn">新增</button>
+    <button id="downloadBtn">下載 doctors.json</button>
+  </div>
+  <table id="table"><thead><tr><th>姓名</th><th>診所</th><th>電話</th><th>傳真</th><th>地址</th><th>行政區</th></tr></thead><tbody></tbody></table>
+<script>
+let doctors = [];
+async function load() {
+  try { const r = await fetch('doctors.json'); doctors = await r.json(); } catch(e) { doctors = []; }
+  render();
+}
+function render() {
+  const tbody = document.querySelector('#table tbody'); tbody.innerHTML = '';
+  doctors.forEach(d => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${d.name||''}</td><td>${d.clinic||''}</td><td>${d.phone||''}</td><td>${d.fax||''}</td><td>${d.address||''}</td><td>${d.district||''}</td>`; tbody.appendChild(tr); });
+}
+document.getElementById('addBtn').addEventListener('click', () => {
+  const d = { name: document.getElementById('name').value.trim(), clinic: document.getElementById('clinic').value.trim(), phone: document.getElementById('phone').value.trim(), fax: document.getElementById('fax').value.trim(), address: document.getElementById('address').value.trim(), district: document.getElementById('district').value.trim() };
+  if (!d.name || !d.clinic || !d.phone || !d.address) { alert('請填姓名/診所/電話/地址'); return; }
+  doctors.push(d); render();
+});
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(doctors, null, 2)], {type:'application/json'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'doctors.json'; a.click(); URL.revokeObjectURL(url);
+});
+load();
+</script>
+</body></html>
