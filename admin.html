@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>新增醫師資料</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>新增醫師資料</h1>
+  <form id="doctorForm">
+    <label>姓名：<input type="text" id="name" required></label>
+    <label>診所：<input type="text" id="clinic" required></label>
+    <label>電話：<input type="text" id="phone"></label>
+    <label>地址：<input type="text" id="address" required></label>
+    <label>經度 (lng)：<input type="number" step="0.000001" id="lng" required></label>
+    <label>緯度 (lat)：<input type="number" step="0.000001" id="lat" required></label>
+    <button type="submit">新增醫師</button>
+  </form>
+  <p><a href="index.html">回到地圖</a></p>
+  <script src="admin.js"></script>
+</body>
+</html>
