@@ -1,4 +1,4 @@
-/* 台大根管專科醫師查詢 */
+/* 台大顯微根管專科醫師地圖 */
 /* 功能：
    1) 載入 doctors.json
    2) Leaflet 顯示地圖與標記
@@ -89,7 +89,7 @@ function render(data) {
     const m = L.marker([item.lat, item.lng]).addTo(markerLayer);
     const html = `
       <div class="popup">
-        <strong>${item.name}</strong>（根管專科）<br/>
+        <strong>${item.name}</strong>（牙髓病專科）<br/>
         ${item.clinic}<br/>
         <a href="tel:${item.phone.replace(/-/g,'')}">${item.phone}</a><br/>
         ${item.address}<br/>
